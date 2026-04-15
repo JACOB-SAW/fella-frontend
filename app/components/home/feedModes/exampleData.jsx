@@ -2,7 +2,11 @@ export const exampleFYP = [
   {
     id: "1",
     type: "media",
-    image: "https://picsum.photos/600/400",
+    images: [
+      "https://picsum.photos/600/400?random=10",
+      "https://picsum.photos/600/400?random=11",
+      "https://picsum.photos/600/400?random=12",
+    ],
     caption: "Late night campus ramen run 🍜",
     user: {
       username: "sfa_foodie",
@@ -25,12 +29,27 @@ export const exampleFYP = [
   {
     id: "3",
     type: "media",
-    image: "https://picsum.photos/601/400",
+    images: [
+      "https://picsum.photos/601/400?random=20",
+      "https://picsum.photos/601/400?random=21",
+    ],
     caption: "Campus chef strikes again",
     user: {
       username: "campuschef",
       pfp: "https://picsum.photos/202",
     },
     rating: "😋",
+  },
+
+  {
+    id: "4",
+    type: "media",
+    images: ["https://picsum.photos/600/400?random=30"],
+    caption: "Found a hidden gem near the library 🍕",
+    user: {
+      username: "pizza_hunter",
+      pfp: "https://picsum.photos/203",
+    },
+    rating: "🔥",
   },
 ];
