@@ -96,6 +96,12 @@ export default function MediaLightbox({ visible, images = [], initialIndex = 0, 
             onScroll={handleScroll}
             scrollEventThrottle={16}
             getItemLayout={(_, i) => ({ length: width, offset: width * i, index: i })}
+            onScrollToIndexFailed={(info) => {
+              flatListRef.current?.scrollToOffset({
+                offset: info.averageItemLength * info.index,
+                animated: false,
+              });
+            }}
             renderItem={({ item }) => (
               <View style={styles.imageSlide}>
                 <Image source={{ uri: item }} style={styles.fullImage} resizeMode="contain" />
