@@ -1,44 +1,62 @@
 // app/components/profile/feedModes/HybridMode.jsx
-import { FlatList, Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import MediaLightbox from "../../MediaLightbox";
 import { exampleMedia, exampleTextPosts } from "./exampleData";
 
 export default function HybridMode() {
+  const [lightbox, setLightbox] = useState({ visible: false, images: [], index: 0 });
+
+  const openLightbox = (uri) => setLightbox({ visible: true, images: [uri], index: 0 });
+  const closeLightbox = () => setLightbox((prev) => ({ ...prev, visible: false }));
+
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.container}
-    >
-      {/* LEFT COLUMN — TEXT POSTS ON PARCHMENT */}
-      <View style={styles.leftColumn}>
-        <View style={styles.parchment}>
+    <>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.container}
+      >
+        {/* LEFT COLUMN — TEXT POSTS ON PARCHMENT */}
+        <View style={styles.leftColumn}>
+          <View style={styles.parchment}>
+            <FlatList
+              data={exampleTextPosts}
+              key={"text"}
+              scrollEnabled={false}
+              renderItem={({ item }) => (
+                <View style={styles.textItem}>
+                  <Text style={styles.textBody}>{item.text}</Text>
+                </View>
+              )}
+            />
+          </View>
+        </View>
+
+        {/* RIGHT COLUMN — TWO-COLUMN MEDIA GRID */}
+        <View style={styles.rightColumn}>
           <FlatList
-            data={exampleTextPosts}
-            key={"text"}
+            data={exampleMedia}
+            key={"media"}
+            numColumns={2}
             scrollEnabled={false}
+            columnWrapperStyle={{ gap: 6 }}
             renderItem={({ item }) => (
-              <View style={styles.textItem}>
-                <Text style={styles.textBody}>{item.text}</Text>
-              </View>
+              <TouchableOpacity onPress={() => openLightbox(item.uri)}>
+                <Image source={{ uri: item.uri }} style={styles.mediaTile} />
+              </TouchableOpacity>
             )}
+            ItemSeparatorComponent={() => <View style={{ height: 6 }} />}
           />
         </View>
-      </View>
+      </ScrollView>
 
-      {/* RIGHT COLUMN — TWO-COLUMN MEDIA GRID */}
-      <View style={styles.rightColumn}>
-        <FlatList
-          data={exampleMedia}
-          key={"media"}
-          numColumns={2}
-          scrollEnabled={false}
-          columnWrapperStyle={{ gap: 6 }}
-          renderItem={({ item }) => (
-            <Image source={{ uri: item.uri }} style={styles.mediaTile} />
-          )}
-          ItemSeparatorComponent={() => <View style={{ height: 6 }} />}
-        />
-      </View>
-    </ScrollView>
+      <MediaLightbox
+        visible={lightbox.visible}
+        images={lightbox.images}
+        initialIndex={lightbox.index}
+        onClose={closeLightbox}
+      />
+    </>
   );
 }
 
